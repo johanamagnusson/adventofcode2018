@@ -3,18 +3,44 @@
 #include <regex>
 #include <string>
 #include <cstdlib>
+#include <queue>
 
 using namespace std;
 
 
-struct nanobot {
+struct Nanobot {
     int x;
     int y;
     int z;
     int r;
 };
 
-void readFile(nanobot *buffer, string& filename)
+class Qitem
+{
+    public:
+    int d;
+    int e;
+    Qitem()
+    {
+        d = 0;
+        e = 0;
+    }
+    Qitem(int d, int e)
+    {
+        d = d;
+        e = e;
+    }
+};
+
+struct Compare
+{
+    bool operator()(const Qitem &lhs, const Qitem &rhs) const {
+        return lhs.d < rhs.d;
+    }
+};
+
+
+void readFile(Nanobot *buffer, string& filename)
 {
     fstream inputFile;
     smatch results;
@@ -35,7 +61,7 @@ void readFile(nanobot *buffer, string& filename)
 
 }
 
-int taxiDistance(nanobot bot1, nanobot bot2)
+int taxiDistance(Nanobot bot1, Nanobot bot2)
 {
     int dx, dy, dz, distance;
     dx = abs(bot2.x - bot1.x);
@@ -50,7 +76,7 @@ int main()
 {
     const int numBots = 1000;
     string filename;
-    nanobot array[numBots];
+    Nanobot array[numBots];
     int i, strongest, distance, numBotsInRange;
 
     filename = "input.txt";
@@ -71,10 +97,48 @@ int main()
             numBotsInRange++;
         }
     }
+    printf("Strongest index: %d\n", strongest);
     printf("Number of bots in range: %d\n", numBotsInRange);
 
     // PART TWO
+    int botsInRange[numBots];
+    int j, mostInRange, maxInRange;
+    for (i = 0; i < numBots; i++) {
+        botsInRange[i] = 0;
+    }
+    for (i = 0; i < numBots; i++) {
+        for (j = i; j < numBots; j++) {
+            distance = taxiDistance(array[i], array[j]);
+            if (array[i].r >= distance && i != j) {
+                botsInRange[i]++;
+            }
+            if (array[j].r >= distance && i != j) {
+                botsInRange[j]++;
+            }
+        }
+    }
+    for (i = 0; i < numBots; i++) {
+        if (botsInRange[i] > botsInRange[mostInRange]) {
+            mostInRange = i;
+        }
+        /*
+        if (i == strongest) {
+            cout << botsInRange[i] << " STRONK\n";
+        } else {
+            cout << botsInRange[i] << "\n";
+        }*/
+    }
+    printf("Bot with most in range: %d\n", mostInRange);
+    printf("%d\n", botsInRange[mostInRange]);
 
+    Nanobot origin;
+    origin.x = 0; origin.y = 0; origin.z = 0; origin.r = 0;
+
+    //priority_queue <Qitem, vector<Qitem>, Compare> q;
+    priority_queue <Qitem> q;
+    q.emplace(20, -1);
+    //for (i = 0; i < numBots; i++) {
+    //    distance = taxiDistance(origin, array[i]);
 
 
 
