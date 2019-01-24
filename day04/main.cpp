@@ -47,7 +47,7 @@ void readFile(Entry *buffer, string& filename)
     i = 0;
     while (getline(inputFile, c)) {
         buffer[i].setEntryString(c);
-        found = regex_match(c, results, regex("\\[(\\d+)-(\\d+)-(\\d+) (\\d+):(\\d+)\\] .*$"));
+        found = regex_match(c, results, regex("\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})\\] .*$"));
         buffer[i].year = stoi(results[1].str());
         buffer[i].month = stoi(results[2].str());
         buffer[i].day = stoi(results[3].str());
