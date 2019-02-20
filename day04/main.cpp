@@ -5,8 +5,6 @@
 using namespace std;
 
 
-
-
 class Entry
 {
     private:
@@ -58,9 +56,10 @@ void readFile(Entry *buffer, string& filename)
     inputFile.close();
 }
 
-
-
-
+void sortEntries(Entry *buffer, Entry *sortedBuffer)
+{
+    ;
+}
 
 int main()
 {

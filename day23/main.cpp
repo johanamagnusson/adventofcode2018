@@ -35,7 +35,7 @@ class Qitem
 struct Compare
 {
     bool operator()(const Qitem &lhs, const Qitem &rhs) const {
-        return lhs.d < rhs.d;
+        return lhs.d > rhs.d;
     }
 };
 
@@ -133,12 +133,29 @@ int main()
 
     Nanobot origin;
     origin.x = 0; origin.y = 0; origin.z = 0; origin.r = 0;
+    Qitem qarray1[numBots]; Qitem qarray2[numBots];
+    priority_queue <Qitem, vector<Qitem>, Compare> q;
+    for (i = 0; i < numBots; i++) {
+        distance = taxiDistance(origin, array[i]);
+        qarray1[i] = Qitem(max(0, distance - array[i].r), 1);
+        qarray2[i] = Qitem(distance + array[i].r, -1);
+        q.push(qarray1[i]);
+        q.push(qarray2[i]);
+    }
+    int count, maxCount, distanceResult;
+    Qitem qi;
+    count = 0; maxCount = 0; distanceResult = 0;
+    while (!q.empty()) {
+        qi = q.top();
+        count += qi.e;
+        if (count > maxCount) {
+            distanceResult = qi.d;
+            maxCount = count;
+        }
+        q.pop();
+    }
 
-    //priority_queue <Qitem, vector<Qitem>, Compare> q;
-    priority_queue <Qitem> q;
-    q.emplace(20, -1);
-    //for (i = 0; i < numBots; i++) {
-    //    distance = taxiDistance(origin, array[i]);
+    printf("Distance to coordinate: %d\n", distanceResult);
 
 
 
